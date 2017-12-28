@@ -8,7 +8,7 @@
     html,
     body {
         font-family: arial;
-        font-size: 14px;
+        font-size: 15px;
         margin: 0;
         padding: 0;
         width: 100%;
@@ -77,9 +77,7 @@
 <body>
     <div id="app">
         <h1>New Year's Resolution</h1>
-        <p v-if="goals.length >= 15" :class="{fire: fire}">{{message[2]}}</p>
-        <p v-else-if="goals.length > 10" :class="{fire: fire}">{{message[1]}}</p>
-        <p v-else>{{message[0]}}</p>
+        <p :class="{fire: fire}" v-text="showMessage"></p>
         <div id="user">
             <ol>
                 <li v-for="goal in goals" v-text="goal"></li>
@@ -100,7 +98,6 @@
             error: false,
             disabled: false,
             fire: true,
-            message: ['Please set yourself some goals, don\'t be lazy!', 'Please be realistic, you got too many goals!', 'BURNOUT WARNING!'],
             show: true
         },
         methods: {
@@ -113,21 +110,39 @@
                 this.goals.push(this.todos);
                 this.todos = '';
             }
-
         },
-        mounted() {
-            if (localStorage.getItem('todos'))
-                this.goals = JSON.parse(localStorage.getItem('todos'));
-
-        },
-        watch: {
-            todos: {
-                handler() {
-                        localStorage.setItem('todos', JSON.stringify(this.goals));
-                    },
-                    deep: true,
-            },
+        computed: {
+            showMessage() {
+                if (!this.goals.length) {
+                    this.fire = false;
+                    return message = 'Please set yourself some goals, don\'t be lazy!'
+                } else {
+                    if (this.goals.length > 4 && this.goals.length < 10) {
+                        return message = 'Please push yourself a little bit further by adding more goals!'
+                    } else if (this.goals.length > 9 && this.goals.length < 15) {
+                        return message = 'Please be realistic, you got too many goals!'
+                    } else if (this.goals.length == 15) {
+                        this.fire = true;
+                        return message = 'BURNOUT WARNING!'
+                    } else {
+                        return message = 'Let\'s go! Add more goals!'
+                    }
+                }
+            }
         }
+        // mounted() {
+        //     if (localStorage.getItem('todos'))
+        //         this.goals = JSON.parse(localStorage.getItem('todos'));
+
+        // },
+        // watch: {
+        //     todos: {
+        //         handler() {
+        //                 localStorage.setItem('todos', JSON.stringify(this.goals));
+        //             },
+        //             deep: true,
+        //     },
+        // }
 
     })
     </script>
