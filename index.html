@@ -76,15 +76,15 @@
 
 <body>
     <div id="app">
-        <h1>New Year's Resolution</h1>
+        <h1>New Year's Resolutions</h1>
         <p :class="{fire: fire}" v-text="showMessage"></p>
         <div id="user">
             <ol>
                 <li v-for="goal in goals" v-text="goal"></li>
             </ol>
         </div>
-        <input id="input" type="text" v-model="todos" :class="{error: error}" :disabled="goals.length >= 15" v-show="goals.length < 15">
-        <button id="button" @click="addGoal" :disabled="goals.length >= 15" v-text="goals.length >= 15 ? 'Until Next Year' : 'Add Goal' "></button>
+        <input id="input" type="text" v-model="todos" :class="{error: error}" :disabled="disabled" v-show="show">
+        <button id="button" @click="addGoal" :disabled="disabled" v-text="text"></button>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.3/vue.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/2.5.3/vue-router.js"></script>
@@ -97,8 +97,9 @@
             goals: [],
             error: false,
             disabled: false,
-            fire: true,
-            show: true
+            fire: false,
+            show: true,
+            text: 'Add Goal'
         },
         methods: {
             addGoal() {
@@ -114,19 +115,19 @@
         computed: {
             showMessage() {
                 if (!this.goals.length) {
-                    this.fire = false;
                     return message = 'Please set yourself some goals, don\'t be lazy!'
+                } else if (this.goals.length > 4 && this.goals.length < 10) {
+                    return message = 'Please push yourself a little bit further by adding more goals!'
+                } else if (this.goals.length > 9 && this.goals.length < 15) {
+                    return message = 'Please be realistic, you got too many goals!'
+                } else if (this.goals.length == 15) {
+                    this.fire = true;
+                    this.disabled = true;
+                    this.show = false;
+                    this.text = 'Until Next Year'
+                    return message = 'BURNOUT WARNING!'
                 } else {
-                    if (this.goals.length > 4 && this.goals.length < 10) {
-                        return message = 'Please push yourself a little bit further by adding more goals!'
-                    } else if (this.goals.length > 9 && this.goals.length < 15) {
-                        return message = 'Please be realistic, you got too many goals!'
-                    } else if (this.goals.length == 15) {
-                        this.fire = true;
-                        return message = 'BURNOUT WARNING!'
-                    } else {
-                        return message = 'Let\'s go! Add more goals!'
-                    }
+                    return message = 'Let\'s go! Add more goals!'
                 }
             }
         }
