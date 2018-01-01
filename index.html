@@ -167,6 +167,10 @@ Vue.component('goal', {
             this.$emit('set-goals', this.goal);
             this.goal = '';
         }
+    }, data() {
+        return {
+            goal: ''
+        }
     }
 })
 
