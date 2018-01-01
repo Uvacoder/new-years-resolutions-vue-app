@@ -187,13 +187,14 @@ new Vue({
     },
     computed: {
             showMessage() {
+                this.fire = false;
                 if (!this.goals.length) {
                     return message = 'Please set yourself some goals, don\'t be lazy!';
                 } else if (this.goals.length > 4 && this.goals.length < 10) {
                     return message = 'Please push yourself a little bit further by adding more goals!';
                 } else if (this.goals.length > 9 && this.goals.length < 15) {
                     return message = 'Please be realistic, you got too many goals!';
-                } else if (this.goals.length == 15) {
+                } else if (this.goals.length > 14) {
                     this.fire = true;
                     this.disabled = true;
                     this.show = false;
