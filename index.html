@@ -26,7 +26,6 @@
     }
     
     button {
-        width: 40%;
         max-width: 180px;
         padding: 1%;
     }
@@ -71,48 +70,118 @@
             box-shadow: 0 0 20px red;
         }
     }
+    
+    .modal-mask {
+        position: fixed;
+        z-index: 9998;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, .5);
+        display: table;
+        transition: opacity .3s ease;
+    }
+    
+    .modal-wrapper {
+        display: table-cell;
+        vertical-align: middle;
+    }
+    
+    .modal-container {
+        width: 300px;
+        margin: 0px auto;
+        padding: 20px 30px;
+        background-color: #fff;
+        border-radius: 2px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+        transition: all .3s ease;
+        font-family: Helvetica, Arial, sans-serif;
+    }
+    
+    .modal-header h3 {
+        margin-top: 0;
+        color: #42b983;
+    }
+    
+    .modal-body {
+        margin: 20px 0;
+    }
+    
+    .modal-default-button {
+        float: right;
+    }
+    
+    .modal-enter {
+        opacity: 0;
+    }
+    
+    .modal-leave-active {
+        opacity: 0;
+    }
+    
+    .modal-enter .modal-container,
+    .modal-leave-active .modal-container {
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1);
+    }
     </style>
 </head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.3/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/2.5.3/vue-router.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.js"></script>
 
 <body>
     <div id="app">
         <h1>New Year's Resolutions</h1>
         <p :class="{fire: fire}" v-text="showMessage"></p>
-        <div id="user">
-            <ol>
-                <li v-for="goal in goals" v-text="goal"></li>
-            </ol>
-        </div>
-        <input id="input" type="text" v-model="todos" :class="{error: error}" :disabled="disabled" v-show="show" v-on:keyup.enter="addGoal">
-        <button id="button" @click="addGoal" :disabled="disabled" v-text="cta"></button>
+        <button id="show-modal" @click="showModal = true" :disabled="disabled" v-text="cta"></button>
+        <goal @set-goals="updateGoal" v-if="showModal"></goal>
+        <ol>
+            <li v-for="(goal, index) in goals">
+                <span v-text="goal"></span>
+                <button @click="deleteGoal(index)">Delete Goal</button>
+            </li>
+        </ol>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.3/vue.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/2.5.3/vue-router.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.js"></script>
-    <script>
-    new Vue({
-        el: '#app',
-        data: {
-            todos: '',
-            goals: [],
-            error: false,
-            disabled: false,
-            fire: false,
-            show: true,
-            cta: 'Add Goal'
-        },
-        methods: {
-            addGoal() {
-                if (!this.todos) {
-                    this.error = true;
-                    return;
-                }
-                this.error = false;
-                this.goals.push(this.todos);
-                this.todos = '';
+    <template id="goal">
+        <transition name="modal">
+            <div class="modal-mask">
+                <div class="modal-wrapper">
+                    <div class="modal-container">
+                        <div>
+                            <input v-model="goal">
+                            <button @click="addGoal()">Enter Goal</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </transition>
+    </template>
+</body>
+<script>
+Vue.component('goal', {
+    template: '#goal',
+    methods: {
+        addGoal() {
+            this.$emit('set-goals', this.goal);
+            this.goal = '';
+        }
+    }
+})
+
+new Vue({
+    el: "#app",
+    methods: {
+        updateGoal(goal) {
+                this.goals.push(goal);
+                this.showModal = false;
+            },
+            deleteGoal(index) {
+                this.goals.splice(index, 1);
             }
-        },
-        computed: {
+    },
+    computed: {
             showMessage() {
                 if (!this.goals.length) {
                     return message = 'Please set yourself some goals, don\'t be lazy!';
@@ -130,23 +199,14 @@
                     return message = 'Let\'s go! Add more goals!';
                 }
             }
-        }
-        // mounted() {
-        //     if (localStorage.getItem('todos'))
-        //         this.goals = JSON.parse(localStorage.getItem('todos'));
-
-        // },
-        // watch: {
-        //     todos: {
-        //         handler() {
-        //                 localStorage.setItem('todos', JSON.stringify(this.goals));
-        //             },
-        //             deep: true
-        //     },
-        // }
-
-    })
-    </script>
-</body>
+        },
+    data: {
+        goal: '',
+        goals: [],
+        cta: 'Add Goal',
+        showModal: false
+    }
+});
+</script>
 
 </html>
