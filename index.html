@@ -128,7 +128,7 @@
                         <div>
                             <p :class="{fire: fire}" v-text="warning"></p>
                             <input type="text" v-model="goal" :class="{error: error}">
-                            <button class="modal-button" @click="addGoal()">Enter Goal</button>
+                            <button class="modal-button" @click="addGoal()">Set Goal</button>
                             <button class="modal-button" @click="closeModal()">Cancel</button>
                         </div>
                     </div>
@@ -143,7 +143,7 @@ Vue.component('goal', {
     methods: {
         addGoal() {
             if (!this.goal.length) {
-                this.warning = 'Please set a goal:';
+                this.warning = 'Please enter a goal:';
                 this.fire = true;
                 this.error = true;
             } else {
