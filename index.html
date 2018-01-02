@@ -97,7 +97,7 @@
         transition: all .3s ease;
         font-family: Helvetica, Arial, sans-serif;
     }
-
+    
     .modal-button {
         margin-top: 20px;
     }
@@ -117,6 +117,8 @@
             <li v-for="(goal, index) in goals">
                 <span v-text="goal"></span>
                 <button @click="deleteGoal(index)">Delete Goal</button>
+                <button @click="up(index)" v-if="index !== 0">UP</button>
+                <button @click="down(index)" v-if="index !== goals.length-1">DOWN</button>
             </li>
         </ol>
     </div>
@@ -142,18 +144,18 @@ Vue.component('goal', {
     template: '#goal',
     methods: {
         addGoal() {
-            if (!this.goal.length) {
-                this.warning = 'Please enter a goal:';
-                this.fire = true;
-                this.error = true;
-            } else {
-                this.$emit('set-goals', this.goal);
-                this.goal = '';
+                if (!this.goal.length) {
+                    this.warning = 'Please enter a goal:';
+                    this.fire = true;
+                    this.error = true;
+                } else {
+                    this.$emit('set-goals', this.goal);
+                    this.goal = '';
+                }
+            },
+            closeModal() {
+                this.$emit('close');
             }
-        },
-        closeModal() {
-            this.$emit('close');
-        }
     },
     data() {
         return {
@@ -165,7 +167,6 @@ Vue.component('goal', {
         }
     }
 })
-
 new Vue({
     el: "#app",
     methods: {
@@ -175,6 +176,9 @@ new Vue({
             },
             deleteGoal(index) {
                 this.goals.splice(index, 1);
+            },
+            up(from, to) {
+                this.goals.splice(to, 0, this.goals.splice(from, 1)[0]);
             }
     },
     computed: {
