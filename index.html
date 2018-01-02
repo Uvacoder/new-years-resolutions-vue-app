@@ -117,8 +117,8 @@
             <li v-for="(goal, index) in goals">
                 <span v-text="goal"></span>
                 <button @click="deleteGoal(index)">Delete Goal</button>
-                <button @click="up(index)" v-if="index !== 0">UP</button>
-                <button @click="down(index)" v-if="index !== goals.length-1">DOWN</button>
+                <button @click="swapGoals(index, index-1)" v-if="index !== 0">UP</button>
+                <button @click="swapGoals(index, index+1)" v-if="index !== goals.length-1">DOWN</button>
             </li>
         </ol>
     </div>
@@ -177,8 +177,8 @@ new Vue({
             deleteGoal(index) {
                 this.goals.splice(index, 1);
             },
-            up(from, to) {
-                this.goals.splice(to, 0, this.goals.splice(from, 1)[0]);
+            swapGoals(oldIndex, newIndex) {
+                this.goals.splice(newIndex, 0, this.goals.splice(oldIndex, 1)[0]);
             }
     },
     computed: {
