@@ -192,9 +192,13 @@
     .icon-down:before {
         content: 'D';
     }
+
+    #reminder {
+        font-size: 1em;
+    }
     
     strong {
-        font-size: 30px;
+        font-size: 1.5em;
         color: #00aeef;
     }
     
@@ -220,6 +224,12 @@
         #message {
             float: none;
         }
+        #reminder {
+            font-size: 2em;
+        }
+        strong {
+            font-size: 1.8em;
+        }
         #emoji {
             float: left;
             position: relative;
@@ -240,9 +250,10 @@
     <div id="app">
         <h1>New Year's Resolutions</h1>
         <div>
-            <p id="message" :class="{fire: fire}" v-text="showMessage"></p><span id="emoji" v-text="emoji"></span></div>
+            <p id="message" :class="{fire: fire}" v-text="showMessage"></p><span id="emoji" v-text="emoji"></span>
+        </div>
         <button class="cta" id="show-modal" @click="show = true" :disabled="disabled" v-text="cta"></button>
-        <p>You've got <strong v-text="goals.length"></strong> goals in total.</p>
+        <p id="reminder">You've got <strong v-text="goals.length"></strong> goals in total.</p>
         <goal v-if="show" @set-goals="updateGoal" @close="show = false"></goal>
         <ol>
             <li v-for="(goal, index) in goals" :key="goal.id">
