@@ -252,8 +252,8 @@
         <div>
             <p id="message" :class="{fire: fire}" v-text="showMessage"></p><span id="emoji" v-text="emoji"></span>
         </div>
-        <button class="cta" id="show-modal" @click="show = true" :disabled="disabled" v-text="cta"></button>
-        <p id="reminder">You've got <strong v-text="goals.length"></strong> goals in total.</p>
+        <button class="cta" id="show-modal" @click="show = true" :disabled="disabled" v-text="cta" v-if="!done"></button>
+        <p id="reminder">You got <strong v-text="goals.length"></strong> goal<span v-if="goals.length > 1">s</span> in total.</p>
         <goal v-if="show" @set-goals="updateGoal" @close="show = false"></goal>
         <ol>
             <li v-for="(goal, index) in goals" :key="goal.id">
@@ -349,6 +349,7 @@ new Vue({
                 for (var i = 0; i < this.goals.length; i++) {
                     a++;
                     if (this.goals[i].completed == true && a == 10) {
+                        this.done = true;
                         this.emoji = '\u{1F44F}';
                         return message = 'CONGRATS! You made it this year!';
                     }
@@ -377,7 +378,7 @@ new Vue({
         cta: 'Add Goal',
         emoji: '',
         warning: '',
-        done: null,
+        done: false,
         fire: false,
         show: false
     }
