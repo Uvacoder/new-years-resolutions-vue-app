@@ -150,6 +150,11 @@
         grid-column: 3;
     }
     
+    .completed {
+        text-decoration: line-through;
+        color: #999;
+    }
+    
     @font-face {
         font-family: 'newyear';
         src: url('fonts/newyear.eot');
@@ -186,6 +191,11 @@
     
     .icon-down:before {
         content: 'D';
+    }
+    
+    strong {
+        font-size: 30px;
+        color: #00aeef;
     }
     
     @media only screen and (max-width: 500px) {
@@ -232,16 +242,17 @@
         <div>
             <p id="message" :class="{fire: fire}" v-text="showMessage"></p><span id="emoji" v-text="emoji"></span></div>
         <button class="cta" id="show-modal" @click="show = true" :disabled="disabled" v-text="cta"></button>
+        <p>You've got <strong>{{goals.length}}</strong> goals in total.</p>
         <goal v-if="show" @set-goals="updateGoal" @close="show = false"></goal>
         <ol>
             <li v-for="(goal, index) in goals" :key="goal.id">
                 <div class="panel">
                     <div class="goals">
-                        <span v-text="goal.title"></span>
+                        <span v-text="goal.title" :class="{completed: goal.completed}"></span>
                     </div>
                     <div class="controls">
-                        <button class="icon-delete" title="DELETE" @click="deleteGoal(index)" v-if="goal.completed == false"></button>
-                        <button class="icon-completed" title="COMPLETED" @click="goal.completed = true"></button>
+                        <button ref="delete" class="icon-delete" title="DELETE" @click="deleteGoal(index)" v-if="goal.completed == false"></button>
+                        <button ref="completed" class="icon-completed" title="COMPLETED" @click="goal.completed = true" v-if="goals.length == 10"></button>
                         <button class="icon-up" title="UP" @click="swapGoals(index, index-1)" v-if="index !== 0"></button>
                         <button class="icon-down" title="DOWN" @click="swapGoals(index, index+1)" v-if="index !== goals.length-1"></button>
                     </div>
@@ -319,21 +330,33 @@ new Vue({
             if (!this.goals.length) {
                 this.emoji = '\u{1F609}';
                 return message = 'Please set yourself some goals, don\'t be lazy!';
-            } else if (this.goals.length > 4 && this.goals.length < 10) {
-                this.emoji = '\u{1F605}'
+            } else if (this.goals.length > 2 && this.goals.length < 5) {
+                this.emoji = '\u{1F605}';
                 return message = 'Please push yourself a little bit further by adding more goals!';
-            } else if (this.goals.length > 9 && this.goals.length < 15) {
-                this.emoji = '\u{1F602}';
+            } else if (this.goals.length > 4 && this.goals.length < 10) {
+                this.emoji = '\u{1F62C}';
                 this.cta = 'Add Goal';
-                return message = 'Please be realistic, you got too many goals!';
-            } else if (this.goals.length > 14) {
+                return message = 'Let\'s go! Add more goals!';
+            } else if (this.goals.length == 10) {
+                var a = 0;
+                for (var i = 0; i < this.goals.length; i++) {
+                    a++;
+                    if (this.goals[i].completed == true && a == 10) {
+                        this.emoji = '\u{1F44F}';
+                        return message = 'CONGRATS! You made it for 10 goals this year!';
+                    }
+                }
+                this.emoji = '\u{1F600}';
+                return message = 'It would be great if you could complete 10 goals this year!';
+            } else if (this.goals.length > 15) {
                 this.fire = true;
                 this.disabled = true;
                 this.emoji = '\u{1F525}';
                 this.cta = 'Until Next Year';
-                return message = 'BURNOUT WARNING!';
+                return message = 'BURNOUT WARNING! Please delete extra goals!';
             } else {
-                return message = 'Let\'s go! Add more goals!';
+                this.emoji = '\u{1F602}';
+                return message = 'Please be realistic, you got too many goals!';
             }
         }
     },
