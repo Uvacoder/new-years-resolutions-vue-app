@@ -324,8 +324,8 @@ new Vue({
                 this.emoji = '\u{1F605}'
                 return message = 'Please push yourself a little bit further by adding more goals!';
             } else if (this.goals.length > 9 && this.goals.length < 15) {
-                this.cta = 'Add Goal';
                 this.emoji = '\u{1F602}';
+                this.cta = 'Add Goal';
                 return message = 'Please be realistic, you got too many goals!';
             } else if (this.goals.length > 14) {
                 this.fire = true;
