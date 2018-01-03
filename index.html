@@ -339,13 +339,13 @@ new Vue({
                     a++;
                     if (this.goals[i].completed == true && a == 10) {
                         this.emoji = '\u{1F44F}';
-                        return message = 'CONGRATS! You made it for 10 goals this year!';
+                        return message = 'CONGRATS! You made it this year!';
                     }
                 }
                 this.cta = 'Add Goal';
                 this.emoji = '\u{1F600}';
                 return message = 'It would be great if you could complete 10 goals this year!';
-            } else if (this.goals.length > 10 && this.goals.length < 14) {
+            } else if (this.goals.length > 10 && this.goals.length < 15) {
                 this.emoji = '\u{1F602}';
                 return message = 'Please be realistic, you got too many goals!';
             } else if (this.goals.length == 15) {
