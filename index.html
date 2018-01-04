@@ -64,6 +64,10 @@
         font-weight: bold;
         display: block;
     }
+
+    input[type="button"]:disabled, button:disabled {
+        background: #ddd;
+    }
     
     input[type="text"].error {
         border: 1px solid red;
@@ -253,7 +257,7 @@
             <p id="message" :class="{fire: fire}" v-text="showMessage"></p><span id="emoji" v-text="emoji"></span>
         </div>
         <button class="cta" id="show-modal" @click="show = true" :disabled="disabled" v-text="cta"></button>
-        <p id="reminder">You got <strong v-text="goals.length"></strong> goal<span v-if="goals.length > 1">s</span> and <strong v-text="done"></strong> goal<span v-if="goals.length > 1">s</span> completed.</p>
+        <p id="reminder">You got <strong v-text="goals.length"></strong> goal<span v-if="goals.length > 1">s</span> and <strong v-text="done"></strong> goal<span v-if="done > 1">s</span> completed.</p>
         <goal v-if="show" @set-goals="updateGoal" @close="show = false"></goal>
         <ol>
             <li v-for="(goal, index) in goals" :key="goal.id">
@@ -262,8 +266,8 @@
                         <span v-text="goal.title" :class="{completed: goal.completed}"></span>
                     </div>
                     <div class="controls">
-                        <button ref="delete" class="icon-delete" title="DELETE" @click="deleteGoal(index)" v-if="goal.completed == false"></button>
-                        <button ref="completed" class="icon-completed" title="COMPLETED" @click="goal.completed = true" v-if="done < 11"></button>
+                        <button ref="delete" class="icon-delete" title="DELETE" @click="deleteGoal(index)" v-if="!goal.completed && done < 11"></button>
+                        <button ref="completed" class="icon-completed" title="COMPLETED" @click="goal.completed = true" v-if="!disabled"></button>
                         <button class="icon-up" title="UP" @click="swapGoals(index, index-1)" v-if="index !== 0"></button>
                         <button class="icon-down" title="DOWN" @click="swapGoals(index, index+1)" v-if="index !== goals.length-1"></button>
                     </div>
@@ -332,9 +336,6 @@ new Vue({
             },
             swapGoals(oldIndex, newIndex) {
                 this.goals.splice(newIndex, 0, this.goals.splice(oldIndex, 1)[0]);
-            },
-            completedGoals() {
-
             }
     },
     computed: {
@@ -345,21 +346,30 @@ new Vue({
             if (!this.goals.length) {
                 this.emoji = '\u{1F609}';
                 return message = 'Please set yourself some goals, don\'t be lazy!';
-            } else if (this.goals.length == 5) {
-                this.emoji = '\u{1F62C}';
-                    return message = 'Let\'s go! Add more goals!';
-            } else if (this.goals.length == 11) {
-                this.emoji = '\u{1F602}';
-                return message = 'Please be realistic, you got too many goals!';
             } else if (this.goals.length < 15) {
+
                 var a = 0;
+                var b = 0
                 for (var i = 0; i < this.goals.length; i++) {
                     if (this.goals[i].completed) {
                         a++;
                         this.done = a;
                         if (a == 10) {
+                            this.disabled = true;
+                            this.cta = 'Until Next Year';
                             this.emoji = '\u{1F44F}';
                             return message = 'CONGRATS! You made it this year!';
+
+                        }
+
+                    } else {
+                        b++;
+                        if (b > 10) {
+
+                            console.log('test');
+                            this.emoji = '\u{1F602}';
+                            return message = 'Please be realistic, you got too many goals!';
+
                         }
 
                     }
@@ -372,7 +382,7 @@ new Vue({
                 this.disabled = true;
                 this.emoji = '\u{1F525}';
                 this.cta = 'Until Next Year';
-                return message = 'BURNOUT WARNING! Please complete and delete extra goals!';
+                return message = 'BURNOUT WARNING! Please delete extra goals!';
             }
         }
     },
