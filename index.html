@@ -367,6 +367,7 @@ new Vue({
 
                 }
                 this.emoji = '\u{1F600}';
+                this.cta = 'Add Goal';
                 return message = 'It would be great if you could complete 10 goals this year!';
             } else {
                 this.fire = true;
@@ -384,6 +385,7 @@ new Vue({
         emoji: '',
         warning: '',
         done: 0,
+        disabled: false,
         fire: false,
         show: false
     }
