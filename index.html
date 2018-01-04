@@ -192,7 +192,7 @@
     .icon-down:before {
         content: 'D';
     }
-
+    
     #reminder {
         font-size: 1em;
     }
@@ -252,8 +252,8 @@
         <div>
             <p id="message" :class="{fire: fire}" v-text="showMessage"></p><span id="emoji" v-text="emoji"></span>
         </div>
-        <button class="cta" id="show-modal" @click="show = true" :disabled="disabled" v-text="cta" v-if="!done"></button>
-        <p id="reminder">You got <strong v-text="goals.length"></strong> goal<span v-if="goals.length > 1">s</span> in total.</p>
+        <button class="cta" id="show-modal" @click="show = true" :disabled="disabled" v-text="cta"></button>
+        <p id="reminder">You got <strong v-text="goals.length"></strong> goal<span v-if="goals.length > 1">s</span> and <strong v-text="done"></strong> goal<span v-if="goals.length > 1">s</span> completed.</p>
         <goal v-if="show" @set-goals="updateGoal" @close="show = false"></goal>
         <ol>
             <li v-for="(goal, index) in goals" :key="goal.id">
@@ -263,7 +263,7 @@
                     </div>
                     <div class="controls">
                         <button ref="delete" class="icon-delete" title="DELETE" @click="deleteGoal(index)" v-if="goal.completed == false"></button>
-                        <button ref="completed" class="icon-completed" title="COMPLETED" @click="goal.completed = true" v-if="goals.length == 10"></button>
+                        <button ref="completed" class="icon-completed" title="COMPLETED" @click="goal.completed = true" v-if="done < 11"></button>
                         <button class="icon-up" title="UP" @click="swapGoals(index, index-1)" v-if="index !== 0"></button>
                         <button class="icon-down" title="DOWN" @click="swapGoals(index, index+1)" v-if="index !== goals.length-1"></button>
                     </div>
@@ -332,6 +332,9 @@ new Vue({
             },
             swapGoals(oldIndex, newIndex) {
                 this.goals.splice(newIndex, 0, this.goals.splice(oldIndex, 1)[0]);
+            },
+            completedGoals() {
+
             }
     },
     computed: {
@@ -341,34 +344,36 @@ new Vue({
             if (!this.goals.length) {
                 this.emoji = '\u{1F609}';
                 return message = 'Please set yourself some goals, don\'t be lazy!';
-            } else if (this.goals.length > 2 && this.goals.length < 5) {
-                this.emoji = '\u{1F605}';
-                return message = 'Please push yourself a little bit further by adding more goals!';
-            } else if (this.goals.length > 7 && this.goals.length < 11) {
+
+            } else if (this.goals.length == 5) {
+                this.emoji = '\u{1F62C}';
+                    return message = 'Let\'s go! Add more goals!';
+            } else if (this.goals.length == 11) {
+                this.emoji = '\u{1F602}';
+                return message = 'Please be realistic, you got too many goals!';
+            } else if (this.goals.length < 15) {
                 var a = 0;
                 for (var i = 0; i < this.goals.length; i++) {
                     a++;
-                    if (this.goals[i].completed == true && a == 10) {
-                        this.done = true;
-                        this.emoji = '\u{1F44F}';
-                        return message = 'CONGRATS! You made it this year!';
+
+                    if (this.goals[i].completed) {
+                        this.done = a;
+                        if (a == 10) {
+                            this.emoji = '\u{1F44F}';
+                            return message = 'CONGRATS! You made it this year!';
+                        }
+
                     }
+
                 }
-                this.cta = 'Add Goal';
                 this.emoji = '\u{1F600}';
                 return message = 'It would be great if you could complete 10 goals this year!';
-            } else if (this.goals.length > 10 && this.goals.length < 15) {
-                this.emoji = '\u{1F602}';
-                return message = 'Please be realistic, you got too many goals!';
-            } else if (this.goals.length == 15) {
+            } else {
                 this.fire = true;
                 this.disabled = true;
                 this.emoji = '\u{1F525}';
                 this.cta = 'Until Next Year';
-                return message = 'BURNOUT WARNING! Please delete extra goals!';
-            } else {
-                this.emoji = '\u{1F62C}';
-                return message = 'Let\'s go! Add more goals!';
+                return message = 'BURNOUT WARNING! Please complete and delete extra goals!';
             }
         }
     },
@@ -378,7 +383,7 @@ new Vue({
         cta: 'Add Goal',
         emoji: '',
         warning: '',
-        done: false,
+        done: 0,
         fire: false,
         show: false
     }
