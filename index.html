@@ -341,10 +341,10 @@ new Vue({
         showMessage() {
             this.fire = false;
             this.disabled = false;
+
             if (!this.goals.length) {
                 this.emoji = '\u{1F609}';
                 return message = 'Please set yourself some goals, don\'t be lazy!';
-
             } else if (this.goals.length == 5) {
                 this.emoji = '\u{1F62C}';
                     return message = 'Let\'s go! Add more goals!';
@@ -354,9 +354,8 @@ new Vue({
             } else if (this.goals.length < 15) {
                 var a = 0;
                 for (var i = 0; i < this.goals.length; i++) {
-                    a++;
-
                     if (this.goals[i].completed) {
+                        a++;
                         this.done = a;
                         if (a == 10) {
                             this.emoji = '\u{1F44F}';
@@ -367,7 +366,6 @@ new Vue({
 
                 }
                 this.emoji = '\u{1F600}';
-                this.cta = 'Add Goal';
                 return message = 'It would be great if you could complete 10 goals this year!';
             } else {
                 this.fire = true;
@@ -385,7 +383,6 @@ new Vue({
         emoji: '',
         warning: '',
         done: 0,
-        disabled: false,
         fire: false,
         show: false
     }
