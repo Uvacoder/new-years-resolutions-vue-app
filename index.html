@@ -321,8 +321,8 @@
                         <span v-text="goal.title" :class="{completed: goal.completed}"></span>
                     </div>
                     <div class="controls">
-                        <button ref="delete" class="icon-delete" title="DELETE" @click="deleteGoal(index)" v-if="!goal.completed && done != 10"></button>
-                        <button ref="completed" class="icon-completed" title="COMPLETED" @click="goal.completed = true" v-if="done != 10"></button>
+                        <button class="icon-delete" title="DELETE" @click="deleteGoal(index)" v-if="!goal.completed && done != 10"></button>
+                        <button class="icon-completed" title="COMPLETED" @click="goal.completed = true" v-if="done != 10"></button>
                         <button class="icon-up" title="UP" @click="swapGoals(index, index-1)" v-if="index !== 0"></button>
                         <button class="icon-down" title="DOWN" @click="swapGoals(index, index+1)" v-if="index !== goals.length-1"></button>
                     </div>
