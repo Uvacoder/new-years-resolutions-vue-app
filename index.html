@@ -284,7 +284,7 @@
                     <div class="modal-container">
                         <div>
                             <p :class="{fire: fire}" v-text="warning"></p>
-                            <input type="text" v-model="goal" :class="{error: error}">
+                            <input type="text" v-model="goal" :class="{error: error}" placeholder="Please enter a goal" @keydown.enter="addGoal()">
                             <button class="modal-button" @click="addGoal()">Set Goal</button>
                             <button class="modal-button" @click="closeModal()">Cancel</button>
                         </div>
