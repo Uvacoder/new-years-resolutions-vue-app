@@ -104,6 +104,20 @@
             box-shadow: 0 0 20px red;
         }
     }
+
+    .modal-enter {
+      opacity: 0;
+    }
+
+    .modal-leave-active {
+      opacity: 0;
+    }
+
+    .modal-enter .modal-container,
+    .modal-leave-active .modal-container {
+      -webkit-transform: scale(1.1);
+      transform: scale(1.1);
+    }
     
     .modal-mask {
         position: fixed;
@@ -114,7 +128,7 @@
         height: 100%;
         background-color: rgba(0, 0, 0, .5);
         display: table;
-        transition: opacity .3s ease;
+        transition: opacity .4s ease;
     }
     
     .modal-wrapper {
@@ -128,7 +142,7 @@
         padding: 20px;
         background-color: #fff;
         box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
-        transition: all .3s ease;
+        transition: all .4s ease;
         font-family: Helvetica, Arial, sans-serif;
     }
     
