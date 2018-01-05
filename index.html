@@ -346,8 +346,8 @@ new Vue({
             if (!this.goals.length) {
                 this.emoji = '\u{1F609}';
                 return message = 'Please set yourself some goals, don\'t be lazy!';
-            } else if (this.goals.length <= 15) {
-
+            }
+            if (this.goals.length <= 15) {
                 var a = 0;
                 for (var i = 0; i < this.goals.length; i++) {
                     if (this.goals[i].completed) {
