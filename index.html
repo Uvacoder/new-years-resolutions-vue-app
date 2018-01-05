@@ -272,7 +272,7 @@
         <div>
             <p id="message" :class="{fire: fire}" v-text="showMessage"></p><span id="emoji" v-text="emoji"></span>
         </div>
-        <button class="cta" id="show-modal" @click="show = true" :disabled="disabled" v-text="cta"></button>
+        <button class="cta" id="show-modal" @click="show = true" :disabled="disabled" v-text="cta" v-if="goals.length < 15"></button>
         <p id="reminder">You got <strong v-text="goals.length"></strong> goal<span v-if="goals.length > 1">s</span> and <strong v-text="done"></strong> goal<span v-if="done > 1">s</span> completed.</p>
         <goal v-if="show" @set-goals="updateGoal" @close="show = false"></goal>
         <ol>
@@ -385,9 +385,7 @@ new Vue({
                     return message = 'Please be realistic, you got too many goals!';
                 } else if (this.goals.length == 15) {
                     this.fire = true;
-                    this.disabled = true;
                     this.emoji = '\u{1F525}';
-                    this.cta = 'Until Next Year';
                     return message = 'BURNOUT WARNING! Please complete your 10 goals!';
                 } else {
                     this.cta = 'Add Goal';
