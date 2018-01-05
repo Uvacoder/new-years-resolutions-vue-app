@@ -373,14 +373,14 @@ new Vue({
                             this.cta = 'Until Next Year';
                             this.emoji = '\u{1F44F}';
                             return message = 'CONGRATS! You made it this year!';
-
                         }
                     }
                 }
                 if (this.goals.length == 5) {
                     this.emoji = '\u{1F605}';
                     return message = 'Please push yourself a little harder by adding more goals!';
-                } else if (this.goals.length == 11) {
+                } else if (this.goals.length > 10 && this.goals.length < 15) {
+                    this.cta = 'Add Goal at Your Own Risk';
                     this.emoji = '\u{1F602}';
                     return message = 'Please be realistic, you got too many goals!';
                 } else if (this.goals.length == 15) {
