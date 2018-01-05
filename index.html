@@ -66,11 +66,6 @@
         display: block;
     }
     
-    input[type="button"]:disabled,
-    button:disabled {
-        background: #ddd;
-    }
-    
     input[type="text"].error {
         border: 1px solid red;
         animation-name: burn;
@@ -272,7 +267,7 @@
         <div>
             <p id="message" :class="{fire: fire}" v-text="showMessage"></p><span id="emoji" v-text="emoji"></span>
         </div>
-        <button class="cta" id="show-modal" @click="show = true" :disabled="disabled" v-text="cta" v-if="goals.length < 15"></button>
+        <button class="cta" id="show-modal" @click="show = true" :disabled="disabled" v-text="cta" v-if="goals.length < 15 && done != 10"></button>
         <p id="reminder">You got <strong v-text="goals.length"></strong> goal<span v-if="goals.length > 1">s</span> and <strong v-text="done"></strong> goal<span v-if="done > 1">s</span> completed.</p>
         <goal v-if="show" @set-goals="updateGoal" @close="show = false"></goal>
         <ol>
@@ -370,7 +365,6 @@ new Vue({
                         this.done = a;
                         if (a == 10) {
                             this.disabled = true;
-                            this.cta = 'Until Next Year';
                             this.emoji = '\u{1F44F}';
                             return message = 'CONGRATS! You made it this year!';
                         }
