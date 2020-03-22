@@ -5,4 +5,4 @@ Improvised coding as I learn, build, and design as I go. All from scratch except
 
 Spent about 2 weeks on this.
 
-http://zoechang.me/showcase/vue-newyear-app.html
+https://new-year-resolutions.netlify.com/
